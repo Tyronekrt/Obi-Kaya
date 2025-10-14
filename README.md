@@ -1,7 +1,16 @@
-# Obi-Kaya Smart Community Assistant Agent
+<div align="center">
 
-## Overview
-Obi-Kaya is a Smart Community Assistant Agent designed to empower Google Developer Group (GDG) organizers, especially in Sub-Saharan Africa, to maximize their community's impact, secure partnerships, and sustain engagement. The agent analyzes community data, generates actionable recommendations, crafts partnership/sponsorship pitches, and provides strategies for ongoing engagement. It is multilingual and can respond in most African languages.
+# 🌐👥 Obi Kaya
+
+### *Your Smart Community Assistant*
+
+[![Google AI](https://img.shields.io/badge/Google%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google/)
+
+---
+
+Obi-Kaya is a Smart Community Assistant Agent designed to empower community organizers/managers or anyone in DevRel, especially in Sub-Saharan Africa, to maximize their community's impact, secure partnerships, and sustain engagement. The agent analyzes community data, generates actionable recommendations, crafts partnership/sponsorship pitches, and provides strategies for ongoing engagement. It is multilingual and can respond in most African languages.
+
+</div>
 
 ## Project Structure
 
@@ -18,7 +27,7 @@ obi_kaya_agent/
 ## Requirements
 - Python 3.8+
 - [google-adk](https://pypi.org/project/google-adk/)
-- [google-generativeai](https://pypi.org/project/google-generativeai/)
+- [google-genai](https://googleapis.github.io/python-genai/)
 
 ## Installation
 
@@ -34,11 +43,23 @@ obi_kaya_agent/
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
+3. **Activate the Virtual Environment You Created Above**
 
-3. **Install Required Packages**
+For Windows: 
    ```sh
-   pip install google-adk google-generativeai
+   source venv/Scripts/activate
    ```
+
+For Mac or Linux: 
+   ```sh
+   source venv/bin/activate
+   ```
+
+4. **Install Required Packages**
+
+```sh
+pip install google-adk google-genai
+```
 
 ## Step-by-Step Guide: Building the Agent
 
@@ -110,7 +131,8 @@ All tools are implemented as Python functions in `agent.py`. Each tool:
 The agent is then instantiated with these tools, a description, and clear instructions on what topics it can help with.
 
 ## Support & Resources
-- [google-adk documentation](https://google.github.io/adk-docs/)
+- [Google ADK Documentation](https://google.github.io/adk-docs/)
+- [Google Gen AI SDK Documentation](https://googleapis.github.io/python-genai/)
 - [Bevy support](https://help.bevy.com/hc/en-us/categories/22880458639767-Community-Enterprise-Pro)
 - [Bevy blog](https://bevy.com/b/blog)
 - [FasterCapital: Measuring Community Impact](https://fastercapital.com/topics/measuring-and-analyzing-community-growth-and-impact.html)

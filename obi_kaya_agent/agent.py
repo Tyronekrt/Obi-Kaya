@@ -4,10 +4,11 @@ import os
 from typing import Dict, List, Optional
 from zoneinfo import ZoneInfo
 from google.adk.agents import Agent
-from google.generativeai import GenerativeModel
+from google import genai
+client = genai.Client()
 from google.genai import types
-import vertexai
-from vertexai.preview import reasoning_engines
+
+
 
 
 def generate_recommendations_from_input(user_text: str, goal_or_request: Optional[str] = None) -> dict:
@@ -27,7 +28,7 @@ def generate_recommendations_from_input(user_text: str, goal_or_request: Optiona
             "message": "Please provide valid community data (text or PDF content) for recommendations."
         }
     prompt = (
-        "You are a professional community manager assistant for Google Developer Group organizers. "
+        "You are a professional community manager assistant for community organizers/managers or anyone in DevRel. "
         "Analyze the following community data and generate actionable recommendations in these three categories:"
         "\n1. Event Ideas & Timing: Suggest event types, formats, and optimal scheduling based on the data. Reference audience demographics, engagement trends, and best practices."
         "\n2. Social Media Strategy: Provide channel-specific guidance (Twitter/X, Instagram, Facebook, etc.), including post examples, hashtags, and optimal posting times. Reference best practices and analytics if available."
@@ -38,8 +39,10 @@ def generate_recommendations_from_input(user_text: str, goal_or_request: Optiona
         "\n\nFormat your answer as a JSON object with keys: 'Event Ideas & Timing', 'Social Media Strategy', 'Ongoing Engagement'. Each key should contain a list of recommendations as strings."
     )
     try:
-        model = GenerativeModel(model_name="gemini-2.0-flash")
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model = "gemini-2.0-flash",
+            contents = prompt
+        )
         try:
             recommendations = json.loads(response.text)
         except Exception:
@@ -88,8 +91,10 @@ def generate_partnership_pitch(user_text: str, goal_or_request: Optional[str] = 
         "\n\nFormat your answer as a JSON object with keys: 'Community Overview', 'Engagement Metrics', 'Impact Statements', 'Value Proposition', 'Next Steps'. Each key should contain a string or bullet points."
     )
     try:
-        model = GenerativeModel(model_name="gemini-2.0-flash")
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model = "gemini-2.0-flash",
+            contents = prompt
+        )
         try:
             pitch = json.loads(response.text)
         except Exception:
@@ -117,9 +122,8 @@ def answer_community_general_question(question: str) -> dict:
     Returns a dict with the question and a detailed answer.
     """
     try:
-        model = GenerativeModel(model_name="gemini-2.0-flash")
         prompt = f"""
-You are a professional tech community organizer assistant for Google Developer Group organizers. Answer the following question in detail, referencing best practices and, if relevant, troubleshooting steps for the Bevy platform.
+You are a professional tech community organizer assistant for community organizers/managers or anyone in DevRel. Answer the following question in detail, referencing best practices and, if relevant, troubleshooting steps for the Bevy platform.
 
 If the question is about the Bevy platform, search the Bevy support site (https://help.bevy.com/hc/en-us/categories/22880458639767-Community-Enterprise-Pro) and summarize the most relevant answer. For other questions, use insights from:
 - https://bevy.com/b/blog
@@ -132,7 +136,10 @@ Be clear, actionable, and cite authoritative tips or resources where possible.
 Question:
 {question}
 """
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model = "gemini-2.0-flash",
+            contents = prompt
+        )
         return {
             "status": "success",
             "report": {
@@ -151,14 +158,14 @@ root_agent = Agent(
     name="obi_kaya_agent",
     model="gemini-2.0-flash-exp",
     description=(
-        "Smart Community Assistant Agent: Empowers Google Developer Group (GDG) organizers, especially in Sub-Saharan Africa, "
+        "Smart Community Assistant Agent: Empowers community organizers/managers or anyone in DevRel, especially in Sub-Saharan Africa, "
         "to maximize their community's impact, secure partnerships, and sustain engagement. The agent analyzes community data, "
         "generates actionable recommendations, crafts partnership/sponsorship pitches, and provides strategies for ongoing engagement. "
         "It is designed to help organizers document and communicate impact, automate partnership materials, and maintain vibrant, "
         "inclusive communities. The agent is multilingual and can respond in most African languages."
     ),
     instruction="""
-You are the Smart Community Assistant Agent for GDG organizers. Your core responsibilities are:
+You are the Smart Community Assistant Agent for community organizers/managers or anyone in DevRel. Your core responsibilities are:
 
 1. Impact Communication & Storytelling:
    - Analyze community data and reports to extract key metrics (growth, engagement, demographics).
@@ -184,7 +191,7 @@ You are the Smart Community Assistant Agent for GDG organizers. Your core respon
    - Advise on campaign planning and content calendars.
 
 5. Multilingual & Inclusive Support:
-   - Respond in most African languages as needed, ensuring accessibility for all GDG organizers in SSA.
+   - Respond in most African languages as needed, ensuring accessibility for all community organizers/managers or anyone in DevRel in SSA.
    - Adapt tone and examples to local context and culture.
 
 You must only answer questions or perform actions related to:
